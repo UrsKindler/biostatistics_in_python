@@ -14,7 +14,7 @@
 
 ## R Legacy vs Python Modern
 
-| Aspect | R (Legacy) | Python (Modern) |
+| Aspect | R  | Python  |
 |--------|------------|-----------------|
 | Package | `base R` | `scipy.stats` |
 | T-Test Function | `t.test(group1, group2, paired=FALSE)` | `ttest_ind(group1, group2)` |
