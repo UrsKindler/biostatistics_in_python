@@ -7,10 +7,10 @@
 
 ## When to Use
 ### Decision Criteria
-- ✅ **Use T-Test when**: Data is normally distributed (Shapiro-Wilk p > 0.05)
-- ✅ **Use Mann-Whitney when**: Data is not normally distributed or ordinal
-- ✅ **Use Paired versions when**: Same subjects measured twice
-- ❌ **Don't use when**: More than two groups (use ANOVA instead)
+- **Use T-Test when**: Data is normally distributed (Shapiro-Wilk p > 0.05)
+- **Use Mann-Whitney when**: Data is not normally distributed or ordinal
+- **Use Paired versions when**: Same subjects measured twice
+- **Don't use when**: More than two groups (use ANOVA instead)
 
 ## R Legacy vs Python Modern
 
