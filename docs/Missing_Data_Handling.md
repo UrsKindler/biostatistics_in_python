@@ -1,0 +1,57 @@
+## **2. Missing Data Handling**
+
+### Overview
+- **Purpose**: Handle missing values through deletion, imputation, or indicator methods
+- **Use Case**: Datasets with incomplete observations, longitudinal studies, survey data
+- **Prerequisites**: Understanding of missing data mechanism (MCAR, MAR, MNAR)
+
+### When to Use
+#### Decision Criteria
+- **Use Complete Case Analysis when**: Missing completely at random (MCAR), <5% missing data
+- **Use Simple Imputation when**: Missing at random (MAR), moderate missingness
+- **Use Multiple Imputation when**: MAR with substantial missingness (>10%)
+- **Use Advanced Methods when**: Missing not at random (MNAR)
+
+### R vs Python
+
+| Aspect | R | Python |
+|--------|---|--------|
+| Package | `mice`, `VIM`, `Hmisc` | `sklearn.impute`, `pandas` |
+| Multiple Imputation | `mice(data, m=5)` | `IterativeImputer()` |
+| Simple Imputation | `Hmisc::impute(x, median)` | `SimpleImputer(strategy='median')` |
+| Missing Patterns | `mice::md.pattern(data)` | `missingno.heatmap(df)` |
+| KNN Imputation | `VIM::kNN(data)` | `KNNImputer(n_neighbors=5)` |
+
+### Quick Start Code
+
+**R Example:**
+```r
+# Load required libraries
+library(mice)
+library(Hmisc)
+
+# Multiple imputation
+imputed_data <- mice(data, m=5, method='pmm', printFlag=FALSE)
+completed_data <- complete(imputed_data)
+
+# Simple median imputation
+data$variable <- impute(data$variable, median)
+```
+
+**Python Simple:**
+```python
+from sklearn.impute import SimpleImputer, KNNImputer
+
+# Simple imputation
+imputer = SimpleImputer(strategy='median')  # or 'mean', 'most_frequent'
+df_imputed = pd.DataFrame(imputer.fit_transform(df), 
+                         columns=df.columns, index=df.index)
+
+# KNN imputation for better results
+knn_imputer = KNNImputer(n_neighbors=5)
+df_knn = pd.DataFrame(knn_imputer.fit_transform(df), 
+                      columns=df.columns, index=df.index)
+
+# Simple forward fill for time series
+df_filled = df.fillna(method='ffill')
+```
