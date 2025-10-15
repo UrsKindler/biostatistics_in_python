@@ -28,6 +28,7 @@
 ```r
 # Load required libraries
 library(VIM)
+library(mice)
 
 # Basic data inspection
 summary(data)
