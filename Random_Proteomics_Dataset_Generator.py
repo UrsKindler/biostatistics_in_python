@@ -33,6 +33,8 @@ instead of generating its own random data, so all figures stay
 comparable and reproducible across scripts and re-runs.
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 
 import numpy as np
