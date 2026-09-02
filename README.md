@@ -124,32 +124,31 @@ flowchart TD
 
 ## Statistical Decision Matrix (Cheat Sheet)
 
-| Research Objective / Data Topology | Distributional Assumption | Variance Homogeneity | Recommended Method | Python Implementation | R Equivalent |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Compare 2 Independent Groups** | Gaussian ($p > 0.05$) | Homoscedastic ($\sigma_1^2 = \sigma_2^2$) | **Student's Two-Sample t-Test** | `scipy.stats.ttest_ind(equal_var=True)` | `t.test(var.equal=TRUE)` |
-| **Compare 2 Independent Groups** | Gaussian ($p > 0.05$) | Heteroscedastic ($\sigma_1^2 
-e \sigma_2^2$) | **Welch's t-Test** | `scipy.stats.ttest_ind(equal_var=False)` | `t.test(var.equal=FALSE)` |
-| **Compare 2 Independent Groups** | Non-Gaussian / Skewed | Any | **Mann-Whitney U-Test** | `scipy.stats.mannwhitneyu()` | `wilcox.test()` |
-| **Compare 2 Paired Samples** | Gaussian differences | Not applicable | **Paired t-Test** | `scipy.stats.ttest_rel()` | `t.test(paired=TRUE)` |
-| **Compare 2 Paired Samples** | Non-Gaussian differences | Not applicable | **Wilcoxon Signed-Rank Test** | `scipy.stats.wilcoxon()` | `wilcox.test(paired=TRUE)` |
-| **Compare $\ge 3$ Independent Groups** | Gaussian ($p > 0.05$) | Homoscedastic ($p > 0.05$) | **One-Way ANOVA** | `scipy.stats.f_oneway()` | `aov()` / `anova()` |
-| **Compare $\ge 3$ Independent Groups** | Non-Gaussian / Ordinal | Any | **Kruskal-Wallis H-Test** | `scipy.stats.kruskal()` | `kruskal.test()` |
-| **Pairwise Post-Hoc Comparison** | Gaussian (Post-ANOVA) | Equal Variances | **Tukey's HSD** | `statsmodels.stats.multicomp.pairwise_tukeyhsd()` | `TukeyHSD()` |
-| **Pairwise Post-Hoc Comparison** | Gaussian (Post-ANOVA) | Unequal Variances | **Games-Howell Test** | `scikit_posthocs.posthoc_gameshowell()` | `userfriendlyscience::posthocTukey()` |
-| **Pairwise Post-Hoc Comparison** | Non-Gaussian (Post-Kruskal) | Any | **Dunn's Test with FDR** | `scikit_posthocs.posthoc_dunn(p_adjust="fdr_bh")` | `FSA::dunnTest()` |
-| **Linear Association (2 Continuous)** | Bivariate Normal | Linear Relationship | **Pearson Correlation ($r$)** | `scipy.stats.pearsonr()` | `cor(method="pearson")` |
-| **Monotonic Association (2 Continuous/Ordinal)** | Non-Gaussian / Monotone | Monotonic Relationship | **Spearman Rank Correlation ($ho$)** | `scipy.stats.spearmanr()` | `cor(method="spearman")` |
-| **Multivariate Group Separation** | Non-parametric | Distance Matrix | **PERMANOVA (Adonis)** | `skbio.stats.distance.permanova()` | `vegan::adonis2()` |
-| **Multivariate Rank Separation** | Non-parametric | Distance Matrix | **ANOSIM** | `skbio.stats.distance.anosim()` | `vegan::anosim()` |
-| **Dimensionality Reduction (Complete Data)** | Continuous | Standardized | **PCA (SVD)** | `sklearn.decomposition.PCA()` | `prcomp(scale=TRUE)` |
-| **Dimensionality Reduction (Missing Data)** | Incomplete matrix (NaNs) | Standardized | **NIPALS PCA (No-Imputation)** | `05b_nipals_pca.perform_nipals_pca()` | `nipals::nipals()` |
-| **Non-Euclidean Ordination** | Arbitrary Distance | Metric | **PCoA (Metric MDS)** | `sklearn.manifold.MDS(metric=True)` | `vegan::cmdscale()` |
-| **Non-Linear Rank Ordination** | Distance Rank Order | Non-metric | **NMDS** | `sklearn.manifold.MDS(metric=False)` | `vegan::metaMDS()` |
-| **Multiple Testing Correction (FWER)** | Simultaneous tests | Arbitrary / Positive Dep. | **Holm-Bonferroni** | `multipletests(method="holm")` | `p.adjust(method="holm")` |
-| **Multiple Testing Correction (FDR)** | Omics Screening ($m \sim 10^4$) | PRDS Dependence | **Benjamini-Hochberg (BH)** | `multipletests(method="fdr_bh")` | `p.adjust(method="BH")` |
-| **Positive FDR / q-value Estimation** | High Signal Density ($m_1 \gg 0$) | Uniform Null Tail | **Storey's $q$-value ($\hat{\pi}_0$ Spline)** | `09_3_fdr.calculate_storey_qvalues()` | `qvalue::qvalue()` |
-| **Set Overlaps ($2 \le k \le 4$ Groups)** | Categorical feature sets | Finite Sets | **Venn Diagram** | `matplotlib_venn.venn3()` / `venny4py` | `VennDiagram::venn.diagram()` |
-| **Set Overlaps ($k \ge 5$ Groups)** | High-dimensional sets | Arbitrary Sets | **UpSet Plot** | `upsetplot.UpSet()` | `UpSetR::upset()` |
+| Research Objective / Data Topology | Distributional Assumption | Variance Homogeneity | Recommended Method | Python Implementation |
+| :--- | :--- | :--- | :--- | :--- |
+| **Compare 2 Independent Groups** | Gaussian ($p > 0.05$) | Homoscedastic ($\sigma_1^2 = \sigma_2^2$) | **Student's Two-Sample t-Test** | `scipy.stats.ttest_ind(equal_var=True)` |
+| **Compare 2 Independent Groups** | Gaussian ($p > 0.05$) | Heteroscedastic ($\sigma_1^2 \neq \sigma_2^2$) | **Welch's t-Test** | `scipy.stats.ttest_ind(equal_var=False)` |
+| **Compare 2 Independent Groups** | Non-Gaussian / Skewed | Any | **Mann-Whitney U-Test** | `scipy.stats.mannwhitneyu()` |
+| **Compare 2 Paired Samples** | Gaussian differences | Not applicable | **Paired t-Test** | `scipy.stats.ttest_rel()` |
+| **Compare 2 Paired Samples** | Non-Gaussian differences | Not applicable | **Wilcoxon Signed-Rank Test** | `scipy.stats.wilcoxon()` |
+| **Compare $\ge 3$ Independent Groups** | Gaussian ($p > 0.05$) | Homoscedastic ($p > 0.05$) | **One-Way ANOVA** | `scipy.stats.f_oneway()` |
+| **Compare $\ge 3$ Independent Groups** | Non-Gaussian / Ordinal | Any | **Kruskal-Wallis H-Test** | `scipy.stats.kruskal()` |
+| **Pairwise Post-Hoc Comparison** | Gaussian (Post-ANOVA) | Equal Variances | **Tukey's HSD** | `statsmodels.stats.multicomp.pairwise_tukeyhsd()` |
+| **Pairwise Post-Hoc Comparison** | Gaussian (Post-ANOVA) | Unequal Variances | **Games-Howell Test** | `scikit_posthocs.posthoc_gameshowell()` |
+| **Pairwise Post-Hoc Comparison** | Non-Gaussian (Post-Kruskal) | Any | **Dunn's Test with FDR** | `scikit_posthocs.posthoc_dunn(p_adjust="fdr_bh")` |
+| **Linear Association (2 Continuous)** | Bivariate Normal | Linear Relationship | **Pearson Correlation ($r$)** | `scipy.stats.pearsonr()` |
+| **Monotonic Association (2 Continuous/Ordinal)** | Non-Gaussian / Monotone | Monotonic Relationship | **Spearman Rank Correlation ($\rho$)** | `scipy.stats.spearmanr()` |
+| **Multivariate Group Separation** | Non-parametric | Distance Matrix | **PERMANOVA (Adonis)** | `skbio.stats.distance.permanova()` |
+| **Multivariate Rank Separation** | Non-parametric | Distance Matrix | **ANOSIM** | `skbio.stats.distance.anosim()` |
+| **Dimensionality Reduction (Complete Data)** | Continuous | Standardized | **PCA (SVD)** | `sklearn.decomposition.PCA()` |
+| **Dimensionality Reduction (Missing Data)** | Incomplete matrix (NaNs) | Standardized | **NIPALS PCA (No-Imputation)** | `05b_nipals_pca.perform_nipals_pca()` |
+| **Non-Euclidean Ordination** | Arbitrary Distance | Metric | **PCoA (Metric MDS)** | `sklearn.manifold.MDS(metric=True)` |
+| **Non-Linear Rank Ordination** | Distance Rank Order | Non-metric | **NMDS** | `sklearn.manifold.MDS(metric=False)` |
+| **Multiple Testing Correction (FWER)** | Simultaneous tests | Arbitrary / Positive Dep. | **Holm-Bonferroni** | `multipletests(method="holm")` |
+| **Multiple Testing Correction (FDR)** | Omics Screening ($m \sim 10^4$) | PRDS Dependence | **Benjamini-Hochberg (BH)** | `multipletests(method="fdr_bh")` |
+| **Positive FDR / q-value Estimation** | High Signal Density ($m_1 \gg 0$) | Uniform Null Tail | **Storey's $q$-value ($\hat{\pi}_0$ Spline)** | `09_3_fdr.calculate_storey_qvalues()` |
+| **Set Overlaps ($2 \le k \le 4$ Groups)** | Categorical feature sets | Finite Sets | **Venn Diagram** | `matplotlib_venn.venn3()` / `venny4py` |
+| **Set Overlaps ($k \ge 5$ Groups)** | High-dimensional sets | Arbitrary Sets | **UpSet Plot** | `upsetplot.UpSet()` |
 
 ---
 
