@@ -1,4 +1,4 @@
-# 📊 Biostatistics in Python: End-to-End Workflow & Reference Guide
+# Biostatistics in Python: End-to-End Workflow & Reference Guide
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -10,45 +10,45 @@ Ein umfassendes, modular aufgebautes Framework für moderne **Biostatistik, mult
 
 ---
 
-## 📑 Inhaltsverzeichnis
+## Inhaltsverzeichnis
 
-- [🎯 Workflow-Pipeline & Architektur](#-workflow-pipeline--architektur)
-- [🧭 Statistische Entscheidungsmatrix (Cheat Sheet)](#-statistische-entscheidungsmatrix-cheat-sheet)
-- [🔬 Phase 1: Datenqualität & Vorverarbeitung](#-phase-1-datenqualität--vorverarbeitung)
+- [Workflow-Pipeline & Architektur](#-workflow-pipeline--architektur)
+- [Statistische Entscheidungsmatrix (Cheat Sheet)](#-statistische-entscheidungsmatrix-cheat-sheet)
+- [Phase 1: Datenqualität & Vorverarbeitung](#-phase-1-datenqualität--vorverarbeitung)
   - [1. Data Quality Assessment](#1-data-quality-assessment)
   - [2. Missing Data Handling](#2-missing-data-handling)
   - [3. Abundance-Threshold Filtering](#3-abundance-threshold-filtering)
   - [4. Normalization & Feature Scaling](#4-normalization--feature-scaling)
-- [📐 Phase 2: Statistische Voraussetzungsprüfungen](#-phase-2-statistische-voraussetzungsprüfungen)
+- [Phase 2: Statistische Voraussetzungsprüfungen](#-phase-2-statistische-voraussetzungsprüfungen)
   - [5. Shapiro-Wilk & Normalverteilungstests](#5-shapiro-wilk--normalverteilungstests)
   - [6. Varianzhomogenitäts-Tests (Homoskedastizität)](#6-varianzhomogenitäts-tests-homoskedastizität)
-- [🧪 Phase 3: Hypothesentests & Assoziationen](#-phase-3-hypothesentests--assoziationen)
+- [Phase 3: Hypothesentests & Assoziationen](#-phase-3-hypothesentests--assoziationen)
   - [7. Pearson & Spearman Korrelation](#7-pearson--spearman-korrelation)
   - [8. Zwei-Gruppen-Vergleiche: T-Test & Mann-Whitney U-Test](#8-zwei-gruppen-vergleiche-t-test--mann-whitney-u-test)
   - [9. Mehrgruppen-Vergleiche: ANOVA & Kruskal-Wallis Test](#9-mehrgruppen-vergleiche-anova--kruskal-wallis-test)
-- [🎯 Phase 4: Post-Hoc Tests, Effektstärken & Multiple Testing](#-phase-4-post-hoc-tests-effektstärken--multiple-testing)
+- [Phase 4: Post-Hoc Tests, Effektstärken & Multiple Testing](#-phase-4-post-hoc-tests-effektstärken--multiple-testing)
   - [10. Post-Hoc Tests (Paarweise Vergleiche)](#10-post-hoc-tests-paarweise-vergleiche)
   - [11. Effektstärken-Berechnung (Effect Size)](#11-effektstärken-berechnung-effect-size)
   - [12. False Discovery Rate (FDR) & Signifikanzkontrolle](#12-false-discovery-rate-fdr--signifikanzkontrolle)
-- [🌐 Phase 5: Multivariate Statistik & Ordination](#-phase-5-multivariate-statistik--ordination)
+- [Phase 5: Multivariate Statistik & Ordination](#-phase-5-multivariate-statistik--ordination)
   - [13. ANOSIM & PERMANOVA](#13-anosim--permanova)
   - [14. Ordination: PCA, PCoA & NMDS](#14-ordination-pca-pcoa--nmds)
-- [🔍 Phase 6: Unsupervised Learning & Clustering](#-phase-6-unsupervised-learning--clustering)
+- [Phase 6: Unsupervised Learning & Clustering](#-phase-6-unsupervised-learning--clustering)
   - [15. K-Means, Hierarchisches Clustering & DBSCAN](#15-k-means-hierarchisches-clustering--dbscan)
-- [🤖 Phase 7: Supervised Machine Learning & Validierung](#-phase-7-supervised-machine-learning--validierung)
+- [Phase 7: Supervised Machine Learning & Validierung](#-phase-7-supervised-machine-learning--validierung)
   - [16. Entscheidungsbäume & Neuronale Netze (MLP)](#16-entscheidungsbäume--neuronale-netze-mlp)
   - [17. Random Forests & Ensemble Learning](#17-random-forests--ensemble-learning)
   - [18. Cross-Validation Strategien](#18-cross-validation-strategien)
   - [19. Model Evaluation & Performance Metrics](#19-model-evaluation--performance-metrics)
-- [🧬 Phase 8: Mengen- & Überlappungsanalysen (Venn & UpSet)](#-phase-8-mengen--überlappungsanalysen-venn--upset)
+- [Phase 8: Mengen- & Überlappungsanalysen (Venn & UpSet)](#-phase-8-mengen--überlappungsanalysen-venn--upset)
   - [20. Venn-Diagramme & UpSet-Plots](#20-venn-diagramme--upset-plots)
-- [🔄 R vs. Python Übersetzungstabelle](#-r-vs-python-übersetzungstabelle)
-- [🚀 Installation & Setup](#-installation--setup)
-- [📄 Lizenz](#-lizenz)
+- [R vs. Python Übersetzungstabelle](#-r-vs-python-übersetzungstabelle)
+- [Installation & Setup](#-installation--setup)
+- [Lizenz](#-lizenz)
 
 ---
 
-## 🎯 Workflow-Pipeline & Architektur
+## Workflow-Pipeline & Architektur
 
 Die folgende Pipeline zeigt den idealtypischen Ablauf einer biostatistischen Datenanalyse von den Rohdaten bis hin zur prädiktiven Modellierung:
 
@@ -73,7 +73,7 @@ flowchart TD
 
 ---
 
-## 🧭 Statistische Entscheidungsmatrix (Cheat Sheet)
+## Statistische Entscheidungsmatrix (Cheat Sheet)
 
 | Forschungsfrage / Datentyp | Normalverteilt? | Varianz homogen? | Empfohlene Methode | Python Funktion / Bibliothek | R Äquivalent |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -94,7 +94,7 @@ flowchart TD
 
 ---
 
-## 🔬 Phase 1: Datenqualität & Vorverarbeitung
+## Phase 1: Datenqualität & Vorverarbeitung
 
 ### 1. Data Quality Assessment
 - **Ziel & Anwendungsfall:** Frühzeitige Erkennung von Datenlücken, Messfehlern, Schiefe und extremen Ausreißern vor allen statistischen Berechnungen.
@@ -210,7 +210,7 @@ df_robust = pd.DataFrame(robust_scaler.fit_transform(df), columns=df.columns, in
 
 ---
 
-## 📐 Phase 2: Statistische Voraussetzungsprüfungen
+## Phase 2: Statistische Voraussetzungsprüfungen
 
 ### 5. Shapiro-Wilk & Normalverteilungstests
 - **Ziel & Anwendungsfall:** Überprüfung der Normalverteilungsannahme zur Auswahl zwischen parametrischen und nicht-parametrischen Tests.
@@ -267,7 +267,7 @@ else:
 
 ---
 
-## 🧪 Phase 3: Hypothesentests & Assoziationen
+## Phase 3: Hypothesentests & Assoziationen
 
 ### 7. Pearson & Spearman Korrelation
 - **Ziel & Anwendungsfall:** Quantifizierung von linearen oder monotonen Zusammenhängen zwischen kontinuierlichen oder ordinalen Merkmalen.
@@ -354,7 +354,7 @@ print(f"Kruskal-Wallis: H = {h_stat:.3f}, p = {p_kruskal:.4e}")
 
 ---
 
-## 🎯 Phase 4: Post-Hoc Tests, Effektstärken & Multiple Testing
+## Phase 4: Post-Hoc Tests, Effektstärken & Multiple Testing
 
 ### 10. Post-Hoc Tests (Paarweise Vergleiche)
 - **Ziel & Anwendungsfall:** Identifikation konkreter Gruppenunterschiede nach signifikantem Omnibus-Test (ANOVA / Kruskal-Wallis).
@@ -436,7 +436,7 @@ print(f"Signifikant nach Bonferroni: {np.sum(rejected_bonf)} / {len(p_values)}")
 
 ---
 
-## 🌐 Phase 5: Multivariate Statistik & Ordination
+## Phase 5: Multivariate Statistik & Ordination
 
 ### 13. ANOSIM & PERMANOVA
 - **Ziel & Anwendungsfall:** Multivariate Hypothesentests zum Nachweis von Unterschieden in der Gesamt-Zusammensetzung (z. B. Mikrobiom-Profile zwischen Phänotypen).
@@ -497,7 +497,7 @@ print(f"NMDS Stress: {nmds.stress_:.3f}")
 
 ---
 
-## 🔍 Phase 6: Unsupervised Learning & Clustering
+## Phase 6: Unsupervised Learning & Clustering
 
 ### 15. K-Means, Hierarchisches Clustering & DBSCAN
 - **Ziel & Anwendungsfall:** Entdeckung unüberwachter Proben- oder Biomarker-Subgruppen (Stratifizierung).
@@ -527,7 +527,7 @@ dbscan = DBSCAN(eps=1.5, min_samples=4).fit(X_scaled)
 
 ---
 
-## 🤖 Phase 7: Supervised Machine Learning & Validierung
+## Phase 7: Supervised Machine Learning & Validierung
 
 ### 16. Entscheidungsbäume & Neuronale Netze (MLP)
 - **Ziel & Anwendungsfall:** Phänotyp-Klassifikation und Biomarker-Selektion mittels überwachter Lernalgorithmen.
@@ -631,7 +631,7 @@ print(f"ROC-AUC Score: {roc_auc_score(y_test, y_prob):.3f}")
 
 ---
 
-## 🧬 Phase 8: Mengen- & Überlappungsanalysen (Venn & UpSet)
+## Phase 8: Mengen- & Überlappungsanalysen (Venn & UpSet)
 
 ### 20. Venn-Diagramme & UpSet-Plots
 - **Ziel & Anwendungsfall:** Schnittmengen, disjunkte Teilmengen und gemeinsame Biomarker-Kerne über 2–20+ Proben-, Gen- oder Proteingruppen hinweg visualisieren.
@@ -656,7 +656,7 @@ upset.plot()
 
 ---
 
-## 🔄 R vs. Python Übersetzungstabelle
+## R vs. Python Übersetzungstabelle
 
 Eine komprimierte Übersicht für Biostatistiker und Data Scientists, die zwischen R und Python wechseln:
 
@@ -685,7 +685,7 @@ Eine komprimierte Übersicht für Biostatistiker und Data Scientists, die zwisch
 
 ---
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### Voraussetzungen
 - Python 3.9 oder neuer
@@ -709,7 +709,7 @@ uv pip install numpy pandas scipy statsmodels scikit-learn scikit-bio scikit-pos
 
 ---
 
-## 📁 Repository-Struktur
+## Repository-Struktur
 
 ```text
 biostatistics_in_python/
@@ -801,11 +801,6 @@ biostatistics_in_python/
 
 ---
 
-## 📄 Lizenz
+## Lizenz
 
 Dieses Projekt steht unter der **[MIT License](LICENSE)**.
-
-### Warum die MIT-Lizenz?
-- **Maximale wissenschaftliche Verbreitung:** Erlaubt die freie, uneingeschränkte Nutzung, Vervielfältigung, Modifikation und Einbindung in akademische Forschungsprojekte sowie industrielle Biotech- und Pharma-Pipelines.
-- **Python Data Science Standard:** Höchste Kompatibilität mit dem Python-Ökosystem (`pandas`, `scipy`, `scikit-learn`, `matplotlib`, `seaborn`).
-- **Rechtssicherheit & Haftungsausschluss:** Schützt den Autor durch den branchenüblichen Standard-Haftungsausschluss für statistische und experimentelle Auswertungen.
