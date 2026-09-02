@@ -14,40 +14,37 @@ A rigorous, modular framework for modern **biostatistics, high-throughput omics 
 
 - [Workflow Pipeline & Architecture](#workflow-pipeline--architecture)
 - [Statistical Decision Matrix (Cheat Sheet)](#statistical-decision-matrix-cheat-sheet)
-- [Data Quality & Preprocessing](#data-quality--preprocessing)
-  - [01. Data Quality Assessment](#01-data-quality-assessment)
-  - [01b. Pairwise Replicate Reproducibility Scatter](#01b-pairwise-replicate-reproducibility-scatter)
-  - [02. Missing Data Handling & Imputation](#02-missing-data-handling--imputation)
-  - [03. Abundance-Threshold & Variance Filtering](#03-abundance-threshold--variance-filtering)
-  - [04. Normalization & Feature Scaling](#04-normalization--feature-scaling)
-- [Statistical Assumption Testing](#statistical-assumption-testing)
-  - [05. Shapiro-Wilk & Normality Diagnostics](#05-shapiro-wilk--normality-diagnostics)
-  - [05b. NIPALS No-Imputation PCA for Incomplete Matrices](#05b-nipals-no-imputation-pca-for-incomplete-matrices)
-  - [02b. Variance Homogeneity & Homoscedasticity](#02b-variance-homogeneity--homoscedasticity)
-- [Hypothesis Testing & Association](#hypothesis-testing--association)
-  - [06. Pearson & Spearman Correlation](#06-pearson--spearman-correlation)
-  - [07. Two-Group Comparisons: Welch / Student t-Test & Mann-Whitney U-Test](#07-two-group-comparisons-welch--student-t-test--mann-whitney-u-test)
-  - [08. Multi-Group Comparisons: One-Way ANOVA & Kruskal-Wallis](#08-multi-group-comparisons-one-way-anova--kruskal-wallis)
-- [Post-Hoc Tests, Effect Sizes & Multiple Testing](#post-hoc-tests-effect-sizes--multiple-testing)
-  - [09_1. Pairwise Post-Hoc Tests (Tukey HSD, Games-Howell, Dunn)](#091-pairwise-post-hoc-tests-tukey-hsd-games-howell-dunn)
-  - [09_2. Effect Size Quantification (Cohen's d, Hedges' g, Eta-Squared)](#092-effect-size-quantification-cohens-d-hedges-g-eta-squared)
-  - [09_3. Multiple Testing Correction & False Discovery Rate (Postdoc Level)](#093-multiple-testing-correction--false-discovery-rate-postdoc-level)
-- [Multivariate Statistics & Ordination](#multivariate-statistics--ordination)
-  - [09. ANOSIM & PERMANOVA Distance Permutations](#09-anosim--permanova-distance-permutations)
-  - [11. Multivariate Ordination: PCA, PCoA & NMDS](#11-multivariate-ordination-pca-pcoa--nmds)
-- [Unsupervised Learning & Clustering](#unsupervised-learning--clustering)
-  - [10. K-Means, Hierarchical Clustering (Ward) & DBSCAN](#10-k-means-hierarchical-clustering-ward--dbscan)
-  - [19. Hierarchical Clustered Heatmaps & Biomarker Modules](#19-hierarchical-clustered-heatmaps--biomarker-modules)
-- [Differential Expression & Diagnostic Omics Visualizations](#differential-expression--diagnostic-omics-visualizations)
-  - [17. Differential Expression Volcano Plots](#17-differential-expression-volcano-plots)
-  - [18. MA Plots (Abundance vs. Ratio Bias Diagnostics)](#18-ma-plots-abundance-vs-ratio-bias-diagnostics)
-- [Supervised Machine Learning & Validation](#supervised-machine-learning--validation)
-  - [12. Decision Trees & Multi-Layer Perceptrons (MLP)](#12-decision-trees--multi-layer-perceptrons-mlp)
-  - [15. Random Forests & Biomarker Importance](#15-random-forests--biomarker-importance)
-  - [13. Cross-Validation Strategies (Stratified K-Fold, LOOCV)](#13-cross-validation-strategies-stratified-k-fold-loocv)
-  - [14. Model Evaluation & Performance Metrics (ROC-AUC, PR-AUC)](#14-model-evaluation--performance-metrics-roc-auc-pr-auc)
-- [Set Overlaps & High-Dimensional Enrichment](#set-overlaps--high-dimensional-enrichment)
-  - [16. Venn Diagrams (2–5 Sets) & Scalable UpSet Plots](#16-venn-diagrams-25-sets--scalable-upset-plots)
+- [1. Data Loading & Quality Check](#1-data-loading--quality-check)
+  - [1. Data Quality Assessment](#1-data-quality-assessment)
+  - [1b. Pairwise Replicate Reproducibility Scatter](#1b-pairwise-replicate-reproducibility-scatter)
+- [2. Preprocessing & Distribution Check](#2-preprocessing--distribution-check)
+  - [2. Missing Data Handling & Imputation](#2-missing-data-handling--imputation)
+  - [2. Abundance-Threshold & Variance Filtering](#2-abundance-threshold--variance-filtering)
+  - [2. Normalization & Z-Score Scaling](#2-normalization--z-score-scaling)
+  - [2b. Shapiro-Wilk & Normality Diagnostics](#2b-shapiro-wilk--normality-diagnostics)
+  - [2b. Variance Homogeneity & Homoscedasticity](#2b-variance-homogeneity--homoscedasticity)
+  - [2b. NIPALS No-Imputation PCA for Incomplete Matrices](#2b-nipals-no-imputation-pca-for-incomplete-matrices)
+- [3. Correlation Check](#3-correlation-check)
+  - [3. Pearson & Spearman Correlation](#3-pearson--spearman-correlation)
+- [4. Group Differences: Univariate & Multivariate](#4-group-differences-univariate--multivariate)
+  - [4. Two-Group Comparisons: Welch / Student t-Test & Mann-Whitney U-Test](#4-two-group-comparisons-welch--student-t-test--mann-whitney-u-test)
+  - [4. Multi-Group Comparisons: One-Way ANOVA & Kruskal-Wallis](#4-multi-group-comparisons-one-way-anova--kruskal-wallis)
+  - [4. Pairwise Post-Hoc Tests: Tukey HSD, Games-Howell & Dunn](#4-pairwise-post-hoc-tests-tukey-hsd-games-howell--dunn)
+  - [4. Effect Size Quantification: Cohen's d, Hedges' g & Eta-Squared](#4-effect-size-quantification-cohens-d-hedges-g--eta-squared)
+  - [4. Multiple Testing Correction & False Discovery Rate (Postdoc Level)](#4-multiple-testing-correction--false-discovery-rate-postdoc-level)
+  - [4. Multivariate Distance Permutations: ANOSIM & PERMANOVA](#4-multivariate-distance-permutations-anosim--permanova)
+- [5. Pattern Discovery: Unsupervised & Supervised](#5-pattern-discovery-unsupervised--supervised)
+  - [5. Unsupervised Clustering: K-Means, Hierarchical (Ward) & DBSCAN](#5-unsupervised-clustering-k-means-hierarchical-ward--dbscan)
+  - [5. Unsupervised Ordination: PCA, PCoA & NMDS](#5-unsupervised-ordination-pca-pcoa--nmds)
+  - [5. Supervised Machine Learning: Decision Trees & Neural Networks (MLP)](#5-supervised-machine-learning-decision-trees--neural-networks-mlp)
+  - [5. Supervised Ensemble Learning: Random Forests](#5-supervised-ensemble-learning-random-forests)
+  - [5. Model Validation: Cross-Validation Strategies](#5-model-validation-cross-validation-strategies)
+  - [5. Model Performance Metrics: ROC-AUC, PR-AUC & Confusion Matrix](#5-model-performance-metrics-roc-auc-pr-auc--confusion-matrix)
+  - [5. Hierarchical Clustered Heatmaps & Biomarker Modules](#5-hierarchical-clustered-heatmaps--biomarker-modules)
+- [Diagnostic Omics Visualizations & Set Overlaps](#diagnostic-omics-visualizations--set-overlaps)
+  - [Differential Expression Volcano Plots](#differential-expression-volcano-plots)
+  - [MA Plots: Ratio vs. Abundance Bias Diagnostics](#ma-plots-ratio-vs-abundance-bias-diagnostics)
+  - [Venn Diagrams (2–5 Sets) & Scalable UpSet Plots](#venn-diagrams-25-sets--scalable-upset-plots)
 - [Synthetic Proteomics Pipeline](#synthetic-proteomics-pipeline)
 - [R vs. Python Rosetta Stone Table](#r-vs-python-rosetta-stone-table)
 - [Installation & Environment Setup](#installation--environment-setup)
@@ -92,9 +89,9 @@ A rigorous, modular framework for modern **biostatistics, high-throughput omics 
 
 ---
 
-## Data Quality & Preprocessing
+## 1. Data Loading & Quality Check
 
-### 01. Data Quality Assessment
+### 1. Data Quality Assessment
 - **Objective**: Systematic diagnostic profiling of missingness mechanisms (MCAR, MAR, MNAR), measurement noise, skewness, and extreme multivariate outliers prior to downstream inferential statistics.
 - **Decision Criteria**:
   - Outlier detection via the Interquartile Range ($IQR = Q_3 - Q_1$): datapoints outside $[Q_1 - 1.5 \cdot IQR, Q_3 + 1.5 \cdot IQR]$ flagged.
@@ -116,7 +113,7 @@ outliers = ((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))).sum()
 
 ---
 
-### 01b. Pairwise Replicate Reproducibility Scatter
+### 1b. Pairwise Replicate Reproducibility Scatter
 - **Objective**: Assess technical and biological reproducibility across experimental replicates within conditions via multi-panel scatter grids, identity lines ($y = x$), and coefficients of determination ($R^2$).
 - **Decision Criteria**:
   - $R^2 \ge 0.95$: Excellent technical reproducibility (DIA-NN / Spectronaut MS quality standard).
@@ -135,7 +132,9 @@ def compute_replicate_r2(s1, s2):
 
 ---
 
-### 02. Missing Data Handling & Imputation
+## 2. Preprocessing & Distribution Check
+
+### 2. Missing Data Handling & Imputation
 - **Objective**: Principled imputation of missing values aligned with the underlying missingness mechanism.
 - **Imputation Strategy**:
   - **Complete Case Analysis (Listwise deletion)**: Permissible only under MCAR with $< 5\%$ loss.
@@ -154,7 +153,7 @@ df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns, index=d
 
 ---
 
-### 03. Abundance-Threshold & Variance Filtering
+### 2. Abundance-Threshold & Variance Filtering
 - **Objective**: Mitigate technical noise and alleviate the severe multiple testing burden by filtering out low-abundance, low-prevalence, and near-zero variance features.
 - **Criteria**:
   - **Prevalence Filter**: Feature present in $\ge X\%$ (e.g., 50%) of replicates in at least one biological group.
@@ -164,7 +163,7 @@ df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns, index=d
 
 ---
 
-### 04. Normalization & Feature Scaling
+### 2. Normalization & Z-Score Scaling
 - **Objective**: Eliminate systematic loading differences, total ion chromatogram (TIC) variations, and scale disparities.
 - **Techniques**:
   - **Median Centering / Total Sum Normalization**: Corrects for global sample loading differences.
@@ -176,9 +175,7 @@ df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns, index=d
 
 ---
 
-## Statistical Assumption Testing
-
-### 05. Shapiro-Wilk & Normality Diagnostics
+### 2b. Shapiro-Wilk & Normality Diagnostics
 - **Objective**: Rigorous empirical verification of Gaussian distribution assumptions to select between parametric and non-parametric statistical tests.
 - **Diagnostics**:
   - $N < 50$: **Shapiro-Wilk Test** ($W$-statistic, optimal statistical power).
@@ -196,18 +193,7 @@ is_normal = p_val > 0.05
 
 ---
 
-### 05b. NIPALS No-Imputation PCA for Incomplete Matrices
-- **Objective**: Execute Principal Component Analysis (PCA) directly on matrices containing missing values (NaNs) **without prior imputation**.
-- **Mathematical Mechanism**:
-  The **NIPALS** (Nonlinear Iterative Partial Least Squares / Wold 1966) algorithm estimates score vectors $t_k$ and loading vectors $p_k$ iteratively using only observed values:
-  $$p_k = \frac{\sum_{i \in \mathrm{obs}} x_{ij} t_{i,k}}{\sum_{i \in \mathrm{obs}} t_{i,k}^2}, \quad t_{i,k} = \frac{\sum_{j \in \mathrm{obs}} x_{ij} p_{j,k}}{\sum_{j \in \mathrm{obs}} p_{j,k}^2}$$
-  Followed by deflation $X_{k+1} = X_k - t_k p_k^T$.
-- **Module**: [`biostatistics_modules/05b_nipals_no_imputation_pca/`](biostatistics_modules/05b_nipals_no_imputation_pca/)
-- **Visual Output**: `05b_nipals_no_imputation_pca.png`
-
----
-
-### 02b. Variance Homogeneity & Homoscedasticity
+### 2b. Variance Homogeneity & Homoscedasticity
 - **Objective**: Test equality of variances across groups ($\sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2$).
 - **Test Selection**:
   - **Levene's Test (Median / Brown-Forsythe)**: Robust against non-normality.
@@ -218,19 +204,32 @@ is_normal = p_val > 0.05
 
 ---
 
-## Hypothesis Testing & Association
+### 2b. NIPALS No-Imputation PCA for Incomplete Matrices
+- **Objective**: Execute Principal Component Analysis (PCA) directly on matrices containing missing values (NaNs) **without prior imputation**.
+- **Mathematical Mechanism**:
+  The **NIPALS** (Nonlinear Iterative Partial Least Squares / Wold 1966) algorithm estimates score vectors $t_k$ and loading vectors $p_k$ iteratively using only observed values:
+  $$p_k = \frac{\sum_{i \in \mathrm{obs}} x_{ij} t_{i,k}}{\sum_{i \in \mathrm{obs}} t_{i,k}^2}, \quad t_{i,k} = \frac{\sum_{j \in \mathrm{obs}} x_{ij} p_{j,k}}{\sum_{j \in \mathrm{obs}} p_{j,k}^2}$$
+  Followed by deflation $X_{k+1} = X_k - t_k p_k^T$.
+- **Module**: [`biostatistics_modules/05b_nipals_no_imputation_pca/`](biostatistics_modules/05b_nipals_no_imputation_pca/)
+- **Visual Output**: `05b_nipals_no_imputation_pca.png`
 
-### 06. Pearson & Spearman Correlation
+---
+
+## 3. Correlation Check
+
+### 3. Pearson & Spearman Correlation
 - **Objective**: Quantify linear ($r$) or monotonic ($\rho$) associations between pairs of continuous/ordinal biological variables.
 - **Formulas**:
-  - **Pearson $r$**: $r = \frac{\sum (x_i - ar{x})(y_i - ar{y})}{\sqrt{\sum (x_i - ar{x})^2 \sum (y_i - ar{y})^2}}$
+  - **Pearson $r$**: $r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}$
   - **Spearman $\rho$**: Pearson $r$ applied to ranked variables $\mathrm{rank}(X), \mathrm{rank}(Y)$.
 - **Module**: [`biostatistics_modules/06_pearson_spearman_correlation/`](biostatistics_modules/06_pearson_spearman_correlation/)
 - **Visual Output**: `06_correlation_analysis.png`
 
 ---
 
-### 07. Two-Group Comparisons: Welch / Student t-Test & Mann-Whitney U-Test
+## 4. Group Differences: Univariate & Multivariate
+
+### 4. Two-Group Comparisons: Welch / Student t-Test & Mann-Whitney U-Test
 - **Objective**: Evaluate location parameter differences between two biological conditions.
 - **Workflow**:
   - Normal & Equal Variances $\implies$ **Student's Two-Sample t-Test**.
@@ -241,7 +240,7 @@ is_normal = p_val > 0.05
 
 ---
 
-### 08. Multi-Group Comparisons: One-Way ANOVA & Kruskal-Wallis
+### 4. Multi-Group Comparisons: One-Way ANOVA & Kruskal-Wallis
 - **Objective**: Test for omnibus differences across $\ge 3$ experimental cohorts while controlling nominal Type I error rates.
 - **Methods**:
   - **One-Way ANOVA ($F$-Test)**: $F = \frac{\mathrm{MS}_{\mathrm{between}}}{\mathrm{MS}_{\mathrm{within}}}$.
@@ -251,9 +250,7 @@ is_normal = p_val > 0.05
 
 ---
 
-## Post-Hoc Tests, Effect Sizes & Multiple Testing
-
-### 09_1. Pairwise Post-Hoc Tests (Tukey HSD, Games-Howell, Dunn)
+### 4. Pairwise Post-Hoc Tests: Tukey HSD, Games-Howell & Dunn
 - **Objective**: Pinpoint exactly which group pairs drive statistical significance following a significant omnibus test.
 - **Selection**:
   - Post-ANOVA (Equal Variances) $\implies$ **Tukey's Honestly Significant Difference (HSD)** (Studentized range $q$).
@@ -264,7 +261,7 @@ is_normal = p_val > 0.05
 
 ---
 
-### 09_2. Effect Size Quantification (Cohen's d, Hedges' g, Eta-Squared)
+### 4. Effect Size Quantification: Cohen's d, Hedges' g & Eta-Squared
 - **Objective**: Quantify biological and clinical magnitude of change independent of sample size $N$.
 - **Key Metrics**:
   - **Cohen's $d$**: $d = \frac{\bar{x}_1 - \bar{x}_2}{s_{\mathrm{pooled}}}$ (Thresholds: $0.2 = \text{Small}, 0.5 = \text{Medium}, 0.8 = \text{Large}$).
@@ -275,7 +272,7 @@ is_normal = p_val > 0.05
 
 ---
 
-### 09_3. Multiple Testing Correction & False Discovery Rate (Postdoc Level)
+### 4. Multiple Testing Correction & False Discovery Rate (Postdoc Level)
 - **Objective**: Control statistical error rates during simultaneous testing of $m \sim 10^3 - 10^6$ omics hypotheses.
 - **Theoretical Foundations**:
   1. **Family-Wise Error Rate (FWER)**:
@@ -284,10 +281,10 @@ is_normal = p_val > 0.05
      - **Hochberg (1988) / Hommel (1988)**: Step-up procedure under Simes inequality.
      - **Westfall-Young (1993)**: Permutation-based step-down ($\text{max}T / \text{min}P$).
   2. **False Discovery Rate (FDR)**:
-     - **Benjamini-Hochberg (BH 1995)**: Step-up $k = \max \{ i : p_{(i)} \le \frac{i}{m} \alpha \}$. Controls $\text{FDR} \le \frac{m_0}{m} \alpha \le \alpha$ under PRDS.
+     - **Benjamini-Hochberg (BH 1995)**: Step-up $k = \max \{ i : p_{(i)} \le \frac{i}{m} \alpha \}$. Controls $\text{FDR} \le \frac{m_0}{m}\alpha \le \alpha$ under PRDS.
      - **Benjamini-Yekutieli (BY 2001)**: Controls FDR under arbitrary dependence using harmonic sum $c(m) = \sum_{i=1}^m \frac{1}{i}$.
   3. **Storey's Positive FDR & $q$-value (Storey 2002, 2003)**:
-     - Estimates true null proportion $\hat{\pi}_0(\lambda) = \frac{\#\{p_i > \lambda\}}{m(1 - \lambda)}$ via natural cubic splines.
+     - Estimates true null proportion $\hat{\pi}_0(\lambda) = \frac{\sum_{i=1}^m \mathbb{I}(p_i > \lambda)}{m(1 - \lambda)}$ via natural cubic splines.
      - Calculates $q(p_{(i)}) = \min_{j \ge i} \left( \frac{\hat{\pi}_0 \cdot m \cdot p_{(j)}}{j} \right)$, improving statistical power by factor $\frac{1}{\hat{\pi}_0}$.
   4. **Local FDR ($\text{locFDR}$, Efron 2004)**:
      - Posterior probability of being a false discovery given test statistic $z$: $\text{locFDR}(z) = \frac{\pi_0 f_0(z)}{f(z)}$.
@@ -297,9 +294,7 @@ is_normal = p_val > 0.05
 
 ---
 
-## Multivariate Statistics & Ordination
-
-### 09. ANOSIM & PERMANOVA Distance Permutations
+### 4. Multivariate Distance Permutations: ANOSIM & PERMANOVA
 - **Objective**: Non-parametric hypothesis testing of whole-community or multivariate omics profiles between experimental conditions.
 - **Methods**:
   - **PERMANOVA (Permutational Multivariate ANOVA)**: Partitions dissimilarity matrices (Bray-Curtis, Euclidean) and calculates pseudo-$F$ statistics across 999+ permutations.
@@ -309,20 +304,9 @@ is_normal = p_val > 0.05
 
 ---
 
-### 11. Multivariate Ordination: PCA, PCoA & NMDS
-- **Objective**: Linear and non-linear dimensionality reduction and unsupervised 2D/3D ordination.
-- **Algorithms**:
-  - **PCA**: SVD-based linear orthogonal projection maximizing explained variance.
-  - **PCoA (Metric MDS)**: Classical scaling preserving metric distances from non-Euclidean dissimilarity matrices.
-  - **NMDS**: Iterative non-metric rank preservation (Kruskal stress $< 0.1 \implies$ excellent ordination).
-- **Module**: [`biostatistics_modules/11_pca_pcoa_nmds_ordination/`](biostatistics_modules/11_pca_pcoa_nmds_ordination/)
-- **Visual Output**: `11_multivariate_ordination.png`
+## 5. Pattern Discovery: Unsupervised & Supervised
 
----
-
-## Unsupervised Learning & Clustering
-
-### 10. K-Means, Hierarchical Clustering (Ward) & DBSCAN
+### 5. Unsupervised Clustering: K-Means, Hierarchical (Ward) & DBSCAN
 - **Objective**: Unsupervised discovery of patient subgroups, biomarker co-expression modules, and disease endotypes.
 - **Algorithms**:
   - **K-Means**: Centroid-based partitioning optimized via Silhouette Score and Elbow analysis.
@@ -333,32 +317,18 @@ is_normal = p_val > 0.05
 
 ---
 
-### 19. Hierarchical Clustered Heatmaps & Biomarker Modules
-- **Objective**: Multi-condition quantitative visualization of expression profiles with simultaneous two-dimensional clustering (row biomarker clustering + column sample dendrograms) and categorical metadata annotations.
-- **Module**: [`biostatistics_modules/19_clustered_heatmaps/`](biostatistics_modules/19_clustered_heatmaps/)
-- **Visual Output**: `19_clustered_heatmaps.png`
+### 5. Unsupervised Ordination: PCA, PCoA & NMDS
+- **Objective**: Linear and non-linear dimensionality reduction and unsupervised 2D/3D ordination.
+- **Algorithms**:
+  - **PCA**: SVD-based linear orthogonal projection maximizing explained variance.
+  - **PCoA (Metric MDS)**: Classical scaling preserving metric distances from non-Euclidean dissimilarity matrices.
+  - **NMDS**: Iterative non-metric rank preservation (Kruskal stress $< 0.1 \implies$ excellent ordination).
+- **Module**: [`biostatistics_modules/11_pca_pcoa_nmds_ordination/`](biostatistics_modules/11_pca_pcoa_nmds_ordination/)
+- **Visual Output**: `11_multivariate_ordination.png`
 
 ---
 
-## Differential Expression & Diagnostic Omics Visualizations
-
-### 17. Differential Expression Volcano Plots
-- **Objective**: Bivariate visualization combining biological magnitude ($\log_2 \text{Fold Change}$) on the x-axis and statistical significance ($-\log_{10} p_{\mathrm{adj}}$) on the y-axis to isolate bona fide biomarker candidates.
-- **Module**: [`biostatistics_modules/17_volcano_plots/`](biostatistics_modules/17_volcano_plots/)
-- **Visual Output**: `17_volcano_plots.png`
-
----
-
-### 18. MA Plots (Abundance vs. Ratio Bias Diagnostics)
-- **Objective**: Bland-Altman ratio-intensity plots ($M = \log_2(R/G)$ vs $A = \frac{1}{2}(\log_2 R + \log_2 G)$) to diagnose abundance-dependent non-linear biases and variance heteroscedasticity across the dynamic range.
-- **Module**: [`biostatistics_modules/18_ma_plots/`](biostatistics_modules/18_ma_plots/)
-- **Visual Output**: `18_ma_plots.png`
-
----
-
-## Supervised Machine Learning & Validation
-
-### 12. Decision Trees & Multi-Layer Perceptrons (MLP)
+### 5. Supervised Machine Learning: Decision Trees & Neural Networks (MLP)
 - **Objective**: Supervised disease state classification and interpretable rule extraction.
 - **Models**:
   - **Decision Trees (`DecisionTreeClassifier`)**: White-box non-linear decision splits.
@@ -368,14 +338,14 @@ is_normal = p_val > 0.05
 
 ---
 
-### 15. Random Forests & Biomarker Importance
+### 5. Supervised Ensemble Learning: Random Forests
 - **Objective**: High-performance bagging ensemble reducing tree variance and extracting robust feature importances (Mean Decrease Impurity / Gini).
 - **Module**: [`biostatistics_modules/15_random_forests/`](biostatistics_modules/15_random_forests/)
 - **Visual Output**: `15_random_forests.png`
 
 ---
 
-### 13. Cross-Validation Strategies (Stratified K-Fold, LOOCV)
+### 5. Model Validation: Cross-Validation Strategies
 - **Objective**: Prevent data leakage, optimistic performance bias, and overfitting in high-dimensional biomarker selection.
 - **Schemes**:
   - **Stratified K-Fold**: Preserves exact class prevalence across all validation folds.
@@ -386,7 +356,7 @@ is_normal = p_val > 0.05
 
 ---
 
-### 14. Model Evaluation & Performance Metrics (ROC-AUC, PR-AUC)
+### 5. Model Performance Metrics: ROC-AUC, PR-AUC & Confusion Matrix
 - **Objective**: Holistic evaluation of binary and multi-class diagnostic classifiers.
 - **Metrics**:
   - **ROC-AUC**: Area under the Receiver Operating Characteristic curve.
@@ -397,9 +367,30 @@ is_normal = p_val > 0.05
 
 ---
 
-## Set Overlaps & High-Dimensional Enrichment
+### 5. Hierarchical Clustered Heatmaps & Biomarker Modules
+- **Objective**: Multi-condition quantitative visualization of expression profiles with simultaneous two-dimensional clustering (row biomarker clustering + column sample dendrograms) and categorical metadata annotations.
+- **Module**: [`biostatistics_modules/19_clustered_heatmaps/`](biostatistics_modules/19_clustered_heatmaps/)
+- **Visual Output**: `19_clustered_heatmaps.png`
 
-### 16. Venn Diagrams (2–5 Sets) & Scalable UpSet Plots
+---
+
+## Diagnostic Omics Visualizations & Set Overlaps
+
+### Differential Expression Volcano Plots
+- **Objective**: Bivariate visualization combining biological magnitude ($\log_2 \text{Fold Change}$) on the x-axis and statistical significance ($-\log_{10} p_{\mathrm{adj}}$) on the y-axis to isolate bona fide biomarker candidates.
+- **Module**: [`biostatistics_modules/17_volcano_plots/`](biostatistics_modules/17_volcano_plots/)
+- **Visual Output**: `17_volcano_plots.png`
+
+---
+
+### MA Plots: Ratio vs. Abundance Bias Diagnostics
+- **Objective**: Bland-Altman ratio-intensity plots ($M = \log_2(R/G)$ vs $A = \frac{1}{2}(\log_2 R + \log_2 G)$) to diagnose abundance-dependent non-linear biases and variance heteroscedasticity across the dynamic range.
+- **Module**: [`biostatistics_modules/18_ma_plots/`](biostatistics_modules/18_ma_plots/)
+- **Visual Output**: `18_ma_plots.png`
+
+---
+
+### Venn Diagrams (2–5 Sets) & Scalable UpSet Plots
 - **Objective**: Quantify shared biomarker intersections, unique identifiers, and set overlaps across experimental conditions.
 - **Selection**:
   - $2 \le k \le 4$ Sets: Classic Venn diagrams via `matplotlib_venn` / `venny4py`.
@@ -457,7 +448,7 @@ python biostatistics_modules/09_3_false_discovery_rate/example_proteomics.py
 | **Stratified K-Fold CV** | `caret::trainControl(method="cv", number=5)` | `sklearn.model_selection.StratifiedKFold(n_splits=5)` |
 | **ROC-AUC Calculation** | `pROC::roc(y, prob)$auc` | `sklearn.metrics.roc_auc_score(y, prob)` |
 | **Venn Diagram (2–4 Sets)** | `VennDiagram::venn.diagram()` | `matplotlib_venn.venn3()` / `venny4py` |
-| **UpSet Plot ($\ge 5$ Sets)** | `UpSetR::upset(fromList(sets))` | `upsetplot.UpSet(from_contents(sets)).plot()` |
+| **UpSet Plot (≥ 5 Sets)** | `UpSetR::upset(fromList(sets))` | `upsetplot.UpSet(from_contents(sets)).plot()` |
 
 ---
 
@@ -656,5 +647,3 @@ biostatistics_in_python/
 ## License
 
 Distributed under the **[MIT License](LICENSE)**. Open source and freely usable for academic and commercial scientific research.
- .
-
