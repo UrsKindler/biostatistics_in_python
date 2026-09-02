@@ -1,46 +1,18 @@
-"""
-00. Random Proteomics Dataset Generator (shared template)
-============================================================
-Purpose: Generate one reproducible, DIA-NN/Spectronaut-style proteomics
-report table that serves as the common input template for all downstream
-scripts (01a Data Quality, 01b Pairwise Scatter, 02 PCA, ...).
-
-Use Case: Provide a realistic wide-format protein quantity table with
-per-run metadata columns, so every visualization/statistics script can be
-tested against the exact same structure your real DIA-NN/Spectronaut
-export would have.
-
-Prerequisites: pandas, numpy
-Data Types: Protein-level identifiers (accessions, gene symbols) plus
-per-sample quantitative columns (NrOfStrippedSequencesIdentified,
-NrOfPrecursorsIdentified, Quantity) for n runs, replicated across groups.
-
-Output: CSV file (proteomics_template.csv) written once and re-used
-(read back, never regenerated inline) by every downstream script.
-
-Column schema (matches the real export naming convention):
-    PG.ProteinAccessions, PG.Genes, PG.ProteinDescriptions, PG.ProteinNames,
-    PG.Pvalue, PG.Qvalue,
-    <run>.raw.PG.NrOfStrippedSequencesIdentified,
-    <run>.raw.PG.NrOfPrecursorsIdentified,
-    <run>.raw.PG.Quantity
-    for every run name in RUN_NAMES.
-
-IMPORTANT: If you edit GROUP_TO_RUNS, n_proteins, missing_rate, or seed
-for a follow-up analysis, re-run main() and commit the resulting CSV --
-every downstream script (01a, 01b, 02, ...) reads this persisted file
-instead of generating its own random data, so all figures stay
-comparable and reproducible across scripts and re-runs.
-"""
-
 from __future__ import annotations
 
+import logging
 from pathlib import Path
+from typing import Mapping
 
 import numpy as np
 import pandas as pd
 
-TEMPLATE_PATH = Path("output") / "proteomics_template.csv"
+logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+log = logging.getLogger("proteomics_generator")
+
+ROOT_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = ROOT_DIR / "output"
+TEMPLATE_PATH = OUTPUT_DIR / "proteomics_template.csv"
 
 GROUP_TO_RUNS: dict[str, list[str]] = {
     "Control": ["Control_R1", "Control_R2", "Control_R3"],
@@ -66,14 +38,6 @@ def create_random_proteomics_table(
     missing_rate: float = 0.08,
     seed: int = 42,
 ) -> pd.DataFrame:
-    """
-    Build a synthetic wide-format proteomics table with realistic
-    structure: shared protein identity columns plus per-run quantitative
-    columns, log-normal intensities, batch-correlated replicates within a
-    group, injected missingness (MAR-like: low-abundance proteins missing
-    more often) and a handful of differentially abundant proteins between
-    groups.
-    """
     if group_to_runs is None:
         group_to_runs = GROUP_TO_RUNS
 
@@ -86,9 +50,18 @@ def create_random_proteomics_table(
 
     base_log2_abundance = rng.normal(loc=15, scale=2.5, size=n_proteins)
 
-    n_diff = max(1, int(0.05 * n_proteins))
-    diff_idx = rng.choice(n_proteins, size=n_diff, replace=False)
-    diff_effect = rng.choice([-1, 1], size=n_diff) * rng.uniform(1.5, 3.0, size=n_diff)
+    # 80 distinct differentially abundant proteins (40 Up, 40 Down in Treatment_A vs Control)
+    n_diff_ta = 80
+    diff_idx_ta = rng.choice(n_proteins, size=n_diff_ta, replace=False)
+    effect_ta = np.zeros(n_proteins)
+    effect_ta[diff_idx_ta[:40]] = rng.uniform(2.2, 4.2, 40)   # Up
+    effect_ta[diff_idx_ta[40:]] = rng.uniform(-4.2, -2.2, 40) # Down
+
+    # Distinct diff proteins for Treatment_B
+    diff_idx_tb = rng.choice(n_proteins, size=n_diff_ta, replace=False)
+    effect_tb = np.zeros(n_proteins)
+    effect_tb[diff_idx_tb[:40]] = rng.uniform(2.0, 3.8, 40)
+    effect_tb[diff_idx_tb[40:]] = rng.uniform(-3.8, -2.0, 40)
 
     df = pd.DataFrame(
         {
@@ -100,26 +73,30 @@ def create_random_proteomics_table(
     )
 
     all_runs = [run for runs in group_to_runs.values() for run in runs]
-
     quantity_matrix = pd.DataFrame(index=df.index)
 
     for group_name, runs in group_to_runs.items():
-        group_shift = {"Control": 0.0, "Treatment_A": 0.3, "Treatment_B": -0.2}.get(group_name, 0.0)
+        if group_name == "Treatment_A":
+            group_effect = effect_ta
+            group_shift = 0.2
+        elif group_name == "Treatment_B":
+            group_effect = effect_tb
+            group_shift = -0.2
+        else:
+            group_effect = np.zeros(n_proteins)
+            group_shift = 0.0
+
         for run in runs:
-            run_noise = rng.normal(loc=0, scale=0.4, size=n_proteins)
-            replicate_noise = rng.normal(loc=0, scale=0.25, size=n_proteins)
+            run_noise = rng.normal(loc=0, scale=0.15, size=n_proteins)
+            replicate_noise = rng.normal(loc=0, scale=0.10, size=n_proteins)
 
-            log2_abundance = base_log2_abundance + group_shift + run_noise + replicate_noise
-
-            if group_name != "Control":
-                log2_abundance[diff_idx] = log2_abundance[diff_idx] + diff_effect
-
+            log2_abundance = base_log2_abundance + group_shift + group_effect + run_noise + replicate_noise
             quantity = np.power(2, log2_abundance)
             quantity_matrix[run] = quantity
 
     for run in all_runs:
         missing_prob = np.clip(
-            (18 - base_log2_abundance) / 20 * missing_rate * 3, 0.0, 0.35
+            (18 - base_log2_abundance) / 20 * missing_rate * 2.5, 0.0, 0.30
         )
         missing_mask = rng.random(n_proteins) < missing_prob
         quantity_matrix.loc[missing_mask, run] = np.nan
@@ -128,78 +105,62 @@ def create_random_proteomics_table(
     n_peptides_base = rng.integers(1, 8, size=n_proteins)
 
     for run in all_runs:
-        is_missing = quantity_matrix[run].isna()
-
-        n_precursors = n_precursors_base + rng.integers(-1, 2, size=n_proteins)
-        n_precursors = np.clip(n_precursors, 0, None)
-        n_precursors[is_missing.to_numpy()] = 0
-
-        n_peptides = n_peptides_base + rng.integers(-1, 2, size=n_proteins)
-        n_peptides = np.clip(n_peptides, 0, None)
-        n_peptides[is_missing.to_numpy()] = 0
-
-        df[f"{run}.raw.PG.NrOfStrippedSequencesIdentified"] = n_peptides
-        df[f"{run}.raw.PG.NrOfPrecursorsIdentified"] = n_precursors
-        df[f"{run}.raw.PG.Quantity"] = quantity_matrix[run].round(2)
-
-    p_values = rng.uniform(0, 1, n_proteins)
-    p_values[diff_idx] = rng.uniform(0, 0.01, n_diff)
-    df["PG.Pvalue"] = p_values.round(6)
-
-    sorted_p = np.sort(p_values)
-    ranks = np.searchsorted(sorted_p, p_values) + 1
-    q_values = np.clip(p_values * n_proteins / ranks, 0, 1)
-    df["PG.Qvalue"] = q_values.round(6)
-
-    ordered_cols = [
-        "PG.ProteinAccessions", "PG.Genes", "PG.ProteinDescriptions",
-        "PG.ProteinNames", "PG.Pvalue", "PG.Qvalue",
-    ]
-    for run in all_runs:
-        ordered_cols += [
-            f"{run}.raw.PG.NrOfStrippedSequencesIdentified",
-            f"{run}.raw.PG.NrOfPrecursorsIdentified",
-            f"{run}.raw.PG.Quantity",
-        ]
-
-    return df[ordered_cols]
-
-
-def save_template(df: pd.DataFrame, path: Path = TEMPLATE_PATH) -> Path:
-    """Persist the random dataset once so every downstream script reads
-    the identical CSV instead of regenerating random data independently."""
-    path.parent.mkdir(exist_ok=True, parents=True)
-    df.to_csv(path, index=False)
-    return path
-
-
-def load_template(path: Path = TEMPLATE_PATH) -> pd.DataFrame:
-    """Load the shared template CSV. Raises if it has not been generated
-    yet via main()."""
-    if not path.exists():
-        raise FileNotFoundError(
-            f"{path} nicht gefunden. Bitte zuerst dieses Script ausfuehren, "
-            "um die Template-CSV zu erzeugen."
+        df[f"{run}.raw.PG.Quantity"] = quantity_matrix[run]
+        df[f"{run}.raw.PG.NrOfPrecursorsMeasured"] = np.clip(
+            n_precursors_base + rng.integers(-1, 2, size=n_proteins), 0, 30
         )
-    return pd.read_csv(path)
+        df[f"{run}.raw.PG.NrOfStrippedSequencesIdentified"] = np.clip(
+            n_peptides_base + rng.integers(0, 2, size=n_proteins), 0, 15
+        )
+
+    # Compute p-values for reference
+    ctrl_cols = [f"{r}.raw.PG.Quantity" for r in group_to_runs["Control"]]
+    ta_cols = [f"{r}.raw.PG.Quantity" for r in group_to_runs["Treatment_A"]]
+
+    c_mat = np.log2(df[ctrl_cols].replace(0, np.nan))
+    t_mat = np.log2(df[ta_cols].replace(0, np.nan))
+    log2fc = t_mat.mean(axis=1) - c_mat.mean(axis=1)
+
+    from scipy import stats
+    p_vals = []
+    for idx in range(n_proteins):
+        c = c_mat.iloc[idx].dropna()
+        t = t_mat.iloc[idx].dropna()
+        if len(c) >= 2 and len(t) >= 2:
+            _, p = stats.ttest_ind(t, c, equal_var=True)
+            p_vals.append(p)
+        else:
+            p_vals.append(np.nan)
+
+    df["PG.Log2FC"] = log2fc
+    df["PG.Pvalue"] = p_vals
+
+    return df
+
+
+def save_template(df: pd.DataFrame, path: Path | None = None) -> Path:
+    target = path or TEMPLATE_PATH
+    target.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(target, index=False)
+    log.info("Saved proteomics template with shape %s to %s", df.shape, target)
+    return target
+
+
+def load_template(path: Path | None = None) -> pd.DataFrame:
+    source = path or TEMPLATE_PATH
+    if not source.exists():
+        log.warning("Template not found at %s. Creating new default table.", source)
+        df = create_random_proteomics_table()
+        save_template(df, source)
+        return df
+    log.info("Loaded template from %s", source)
+    return pd.read_csv(source)
 
 
 def main() -> None:
-    df = create_random_proteomics_table(
-        n_proteins=800,
-        group_to_runs=GROUP_TO_RUNS,
-        missing_rate=0.08,
-        seed=42,
-    )
-
+    df = create_random_proteomics_table(n_proteins=800, seed=42)
     out_path = save_template(df)
-
-    print(f"Proteine: {len(df)}")
-    print(f"Spalten total: {df.shape[1]}")
-    print(f"Gruppen -> Runs: {GROUP_TO_RUNS}")
-    print(f"\nTemplate-CSV gespeichert unter:\n{out_path.resolve()}")
-    print("\n=== df.head() ===")
-    print(df.head())
+    print(f"Template successfully generated at: {out_path.resolve()}")
 
 
 if __name__ == "__main__":

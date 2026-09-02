@@ -25,25 +25,31 @@ def hedges_g(x: np.ndarray, y: np.ndarray) -> float:
 
 
 def plot_effect_sizes(effect_dict: dict[str, float], outpath: Path) -> None:
-    fig, ax = plt.subplots(figsize=(10, 5))
-    names = list(effect_dict.keys())
-    values = list(effect_dict.values())
+    # Sort effect sizes descending (max to min)
+    sorted_items = sorted(effect_dict.items(), key=lambda item: item[1], reverse=False)
+    names = [k for k, _ in sorted_items]
+    values = [v for _, v in sorted_items]
     colors = ["#2C7FB8" if v >= 0 else "#D9534F" for v in values]
 
-    bars = ax.barh(names, values, color=colors, alpha=0.85)
-    ax.axvline(0, color="black", linestyle="-", lw=1)
+    fig, ax = plt.subplots(figsize=(11, 5.5))
+    bars = ax.barh(names, values, color=colors, alpha=0.85, edgecolor="black", height=0.55)
+    
+    ax.axvline(0, color="black", linestyle="-", lw=1.2)
     ax.axvline(0.2, color="gray", linestyle=":", label="Small (0.2)")
     ax.axvline(0.5, color="orange", linestyle="--", label="Medium (0.5)")
     ax.axvline(0.8, color="red", linestyle="-.", label="Large (0.8)")
 
     for bar in bars:
         w = bar.get_width()
-        xpos = w + (0.05 if w >= 0 else -0.15)
-        ax.text(xpos, bar.get_y() + bar.get_height()/2.0, f"{w:.2f}", va="center", fontweight="bold", fontsize=9)
+        xpos = w + (0.06 if w >= 0 else -0.16)
+        ax.text(xpos, bar.get_y() + bar.get_height()/2.0, f"{w:.2f}", va="center", fontweight="bold", fontsize=9.5)
 
-    ax.set_xlabel("Effect Size (Cohen's d / Hedges' g)", fontweight="bold")
-    ax.set_title("Biomarker Effect Size Magnitudes", fontweight="bold", fontsize=12)
-    ax.legend(loc="lower right", frameon=True)
+    max_val = max(abs(min(values)), abs(max(values)))
+    ax.set_xlim(-max_val - 0.5, max_val + 0.6)
+
+    ax.set_xlabel("Effect Size (Cohen's d / Hedges' g)", fontweight="bold", fontsize=11)
+    ax.set_title("Biomarker Effect Size Magnitudes (Sorted Max to Min)", fontweight="bold", fontsize=12)
+    ax.legend(loc="lower right", frameon=True, framealpha=0.9)
     ax.grid(axis="x", alpha=0.3)
 
     plt.tight_layout()
@@ -55,7 +61,7 @@ def plot_effect_sizes(effect_dict: dict[str, float], outpath: Path) -> None:
 def main() -> None:
     np.random.seed(42)
     g_ctrl = np.random.normal(10, 1.2, 30)
-    g_ta = np.random.normal(11.5, 1.3, 30)
+    g_ta = np.random.normal(11.8, 1.1, 30)
     g_tb = np.random.normal(9.0, 1.1, 30)
 
     effects = {

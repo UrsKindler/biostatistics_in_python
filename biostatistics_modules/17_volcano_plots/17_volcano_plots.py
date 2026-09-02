@@ -31,7 +31,7 @@ def plot_volcano(
     choices = ["Up", "Down"]
     d["regulation"] = np.select(conditions, choices, default="Not significant")
 
-    plt.figure(figsize=(9, 7))
+    plt.figure(figsize=(9.5, 7.5))
 
     categories = [("Up", "#D9534F"), ("Down", "#2C7FB8"), ("Not significant", "#B0B0B0")]
     for label, color in categories:
@@ -40,10 +40,11 @@ def plot_volcano(
             d.loc[mask, log2fc_col],
             d.loc[mask, "neg_log10_padj"],
             c=color,
-            s=25,
-            alpha=0.65,
-            label=label,
-            edgecolors="none",
+            s=35 if label != "Not significant" else 15,
+            alpha=0.75 if label != "Not significant" else 0.4,
+            label=f"{label} ({mask.sum()})",
+            edgecolors="black" if label != "Not significant" else "none",
+            linewidth=0.5 if label != "Not significant" else 0,
         )
 
     top_up = d[d["regulation"] == "Up"].sort_values([padj_col, log2fc_col], ascending=[True, False]).head(top_n)
@@ -74,15 +75,15 @@ def plot_volcano(
         0.95,
         f"Significant Up: {n_up}\nSignificant Down: {n_down}\nCut-offs: |log2FC| $\\geq$ {log2fc_thr}, padj $\\leq$ {padj_thr}",
         transform=plt.gca().transAxes,
-        fontsize=9,
+        fontsize=9.5,
         verticalalignment="top",
-        bbox=dict(boxstyle="round,pad=0.5", facecolor="white", alpha=0.85, edgecolor="#CCCCCC"),
+        bbox=dict(boxstyle="round,pad=0.5", facecolor="white", alpha=0.9, edgecolor="#CCCCCC"),
     )
 
     plt.xlabel("log₂ Fold Change", fontsize=11, fontweight="bold")
     plt.ylabel("-log₁₀(Adjusted P-value)", fontsize=11, fontweight="bold")
     plt.title(f"Volcano Plot: {contrast_name}", fontsize=13, fontweight="bold")
-    plt.legend(frameon=True, fontsize=9, loc="upper right")
+    plt.legend(frameon=True, fontsize=9.5, loc="upper right")
     plt.grid(alpha=0.25)
 
     outdir.mkdir(exist_ok=True, parents=True)
@@ -97,9 +98,20 @@ def main() -> None:
     out_dir = Path(__file__).parent
     np.random.seed(42)
     n = 1000
-    log2fc = np.random.normal(0, 1.2, n)
-    pvals = np.random.beta(0.5, 5, n)
-    pvals[np.abs(log2fc) > 1.5] = np.random.uniform(1e-8, 0.01, size=int((np.abs(log2fc) > 1.5).sum()))
+    
+    # Generate background non-significant proteins
+    log2fc = np.random.normal(0, 0.6, n)
+    pvals = np.random.uniform(0.06, 1.0, n)
+    
+    # Instate 45 clear UP and 45 clear DOWN significant proteins
+    up_idx = np.random.choice(n, size=45, replace=False)
+    log2fc[up_idx] = np.random.uniform(1.5, 4.0, 45)
+    pvals[up_idx] = 10 ** np.random.uniform(-10, -2.5, 45)
+
+    remaining = [i for i in range(n) if i not in up_idx]
+    down_idx = np.random.choice(remaining, size=45, replace=False)
+    log2fc[down_idx] = np.random.uniform(-4.0, -1.5, 45)
+    pvals[down_idx] = 10 ** np.random.uniform(-10, -2.5, 45)
 
     df = pd.DataFrame({
         "gene_name": [f"GENE_{i+1:04d}" for i in range(n)],

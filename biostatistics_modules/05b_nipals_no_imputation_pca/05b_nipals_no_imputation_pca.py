@@ -128,7 +128,7 @@ def plot_nipals_pca_comparison(
     ax2.set_title("Scree Plot (Variance Explained)", fontweight="bold", fontsize=12)
     ax2.set_xticks(pcs)
     ax2.set_ylim(0, 105)
-    ax2.legend(loc="center right", frameon=True)
+    ax2.legend(loc="upper left", frameon=True)
     ax2.grid(alpha=0.3)
 
     plt.tight_layout()
